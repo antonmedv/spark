@@ -5,8 +5,6 @@ const steps = 40
 const dx = 5
 const basis = 1.5
 const gradient = ['#3023AE', '#C86DD7']
-// ['#ef32d9', '#89fffd']
-// ['#462cff', '#f084ff']
 
 const round = num => Math.round(num * 100) / 100
 const vec = (x, y) => ({
@@ -25,8 +23,12 @@ const sub = (a, b) => vec(a.x - b.x, a.y - b.y)
 const end = px => px[px.length - 1]
 
 function createSvg(data) {
+  if (data.length <= steps) {
+    return text('⭐️ not enough stars')
+  }
+
   const min = data[0]
-  const max = end[data]
+  const max = end(data)
   const step = (max - min) / steps
 
   const yx = []
@@ -95,4 +97,11 @@ function createSvg(data) {
 </svg>`
 }
 
+function text(text) {
+  return `<svg width="200" height="50" viewBox="0 0 210 50" xmlns="http://www.w3.org/2000/svg">
+    <text x="40" y="30">${text}</text>     
+</svg>`
+}
+
+createSvg.text = text
 module.exports = createSvg
