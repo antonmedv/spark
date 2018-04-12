@@ -1,6 +1,6 @@
 const r2 = require('r2')
 
-const token = '82581a5f62af2960acf9b9c437dbed630034b4e9'
+const token = process.env.ACCESS_TOKEN
 const headers = {
   Authorization: `bearer ${token}`
 }
@@ -38,26 +38,31 @@ async function fetch(owner, name, first, after = null) {
     }
   }).json
 
-  const {
-    data: {
-      repository,
-      rateLimit: {remaining}
-    }
-  } = res
+  try {
+    const {
+      data: {
+        repository,
+        rateLimit: {remaining}
+      }
+    } = res
 
-  if (!repository) {
+    if (!repository) {
+      return null
+    }
+
+    const {
+      stargazers: {
+        totalCount,
+        edges,
+        pageInfo: {hasNextPage, endCursor}
+      }
+    } = repository
+
+    return {totalCount, edges, hasNextPage, endCursor, remaining}
+  } catch (err) {
+    console.log('Error', res)
     return null
   }
-
-  const {
-    stargazers: {
-      totalCount,
-      edges,
-      pageInfo: {hasNextPage, endCursor}
-    }
-  } = repository
-
-  return {totalCount, edges, hasNextPage, endCursor, remaining}
 }
 
 module.exports = fetch

@@ -1,3 +1,4 @@
+require('dotenv').config()
 const koa = require('koa')
 const route = require('koa-route')
 const {dirname} = require('path')
