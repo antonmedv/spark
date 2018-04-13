@@ -6,7 +6,7 @@ const layout = (content) => `
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>⚡️ GitHub Stars Sparkline</title>
+  <title>⚡️ GitHub Stars Sparklines</title>
   <meta name="viewport" content="width=device-width, user-scalable=yes">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
@@ -54,7 +54,10 @@ const a = (path) => {
   `
 }
 
+const h1 = () => `<a href="/"><h1>⚡️ Spark <span>GitHub Stars Sparklines</span></h1></a>`
+
 exports.index = () => layout(`
+${h1()}
 <div class="grid">
   ${a('facebook/react')}
   ${a('angular/angular')}
@@ -76,7 +79,8 @@ exports.index = () => layout(`
 
 
 exports.repo = ({owner, name}) => layout(`
-<div class="one">  
+${h1()}
+<div class="one">      
   ${box(owner, name)}
   <code>[![Sparkline](https://stars.medv.io/${owner + '/' + name}.svg)](https://stars.medv.io/${owner + '/' + name})</code>
 </div>

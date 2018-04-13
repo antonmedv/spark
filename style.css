@@ -27,6 +27,22 @@ body {
     max-width: 1400px;
 }
 
+h1 {
+    margin-bottom: 50px;
+    font-size: 32px;
+}
+
+h1 > span {
+    font-size: 16px;
+    font-weight: normal;
+}
+
+@media only screen and (max-device-width: 350px) {
+    h1 > span {
+        display: block;
+    }
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -91,6 +107,9 @@ a {
 .one .box {
     width: 230px;
     align-self: center;
+    transform: scale(1.5);
+    margin-top: 30px;
+    margin-bottom: 50px;
 }
 
 code {
