@@ -18,6 +18,8 @@ app.use(route.get('/:owner/:name.svg', async (ctx, owner, name) => {
   try {
     stats = await fs.stat(path)
     ctx.set('Last-Modified', stats.mtime.toUTCString())
+    ctx.set('Cache-Control', 'max-age=86400')
+
     ctx.body = fs.createReadStream(path)
 
     const now = new Date().getTime()
@@ -30,7 +32,13 @@ app.use(route.get('/:owner/:name.svg', async (ctx, owner, name) => {
   } catch (err) {
     if (err.code === 'ENOENT') {
       queue.push(path, owner, name)
-      ctx.body = createTextSvg(`⚡️ loading stars ${percent.get(path) || 0}%`)
+
+      const p = percent.get(path)
+      if (p) {
+        ctx.body = createTextSvg(`⚡️ loading stars ${p}%`)
+      } else {
+        ctx.body = createTextSvg(`👋️ waining in queue ${queue.indexOf(path) + 1}`)
+      }
     } else {
       ctx.body = createTextSvg(`⚠️ error️`)
     }

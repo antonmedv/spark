@@ -34,4 +34,8 @@ function push(path, owner, name) {
   }
 }
 
-module.exports = {worker, push, size}
+function indexOf(path) {
+  return queue.findIndex(([p]) => path === p)
+}
+
+module.exports = {worker, push, size, indexOf}
