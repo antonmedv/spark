@@ -62,8 +62,8 @@ async function fetch(owner, name, first, after = null) {
         data = json.data
         rateLimit.remaining = data.rateLimit.remaining
       } else {
-        console.log(json)
-        await delay(1000)
+        console.log(json) // Usually it's API rate limit exceeded
+        await delay(10 * 1000)
       }
 
     } catch (err) {
