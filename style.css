@@ -104,6 +104,13 @@ code {
     background-color: #eeeeee;
 }
 
+@media only screen and (max-device-width: 812px) {
+    code {
+        width: 100%;
+        max-width: none;
+    }
+}
+
 .r {
     top: 0;
     left: 0;
