@@ -1,6 +1,6 @@
 # ⚡️ Spark
 
-Got to [stars.medv.io](https://stars.medv.io)
+Go to [stars.medv.io](https://stars.medv.io)
 
 ## License
 
