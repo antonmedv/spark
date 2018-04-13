@@ -40,7 +40,7 @@ app.use(route.get('/:owner/:name.svg', async (ctx, owner, name) => {
       if (p) {
         ctx.body = createTextSvg(`⚡️ loading stars ${p}%`)
       } else {
-        ctx.body = createTextSvg(`👋️ waining in queue ${queue.indexOf(path) + 1}`)
+        ctx.body = createTextSvg(`👋️ waiting in queue ${queue.indexOf(path) + 1}`)
       }
     } else {
       ctx.body = createTextSvg(`⚠️ error️`)
