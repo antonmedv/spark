@@ -24,7 +24,7 @@ const end = px => px[px.length - 1]
 
 function createSvg(data) {
   if (data.length <= steps) {
-    return text('⭐️ not enough stars')
+    return createTextSvg('⭐️ not enough stars')
   }
 
   const min = data[0]
@@ -97,11 +97,10 @@ function createSvg(data) {
 </svg>`
 }
 
-function text(text) {
+function createTextSvg(text) {
   return `<svg width="200" height="50" viewBox="0 0 210 50" xmlns="http://www.w3.org/2000/svg">
     <text x="40" y="30">${text}</text>     
 </svg>`
 }
 
-createSvg.text = text
-module.exports = createSvg
+module.exports = {createSvg, createTextSvg}

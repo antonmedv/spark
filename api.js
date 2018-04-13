@@ -1,3 +1,4 @@
+const delay = require('delay')
 const r2 = require('r2')
 
 const token = process.env.ACCESS_TOKEN
@@ -25,44 +26,53 @@ query($owner: String!, $name: String!, $first: Int!, $after: String) {
 }
 `
 
-async function fetch(owner, name, first, after = null) {
-  const res = await r2.post('https://api.github.com/graphql', {
-    headers, json: {
-      query,
-      variables: {
-        owner,
-        name,
-        first,
-        after
-      }
-    }
-  }).json
-
-  try {
-    const {
-      data: {
-        repository,
-        rateLimit: {remaining}
-      }
-    } = res
-
-    if (!repository) {
-      return null
-    }
-
-    const {
-      stargazers: {
-        totalCount,
-        edges,
-        pageInfo: {hasNextPage, endCursor}
-      }
-    } = repository
-
-    return {totalCount, edges, hasNextPage, endCursor, remaining}
-  } catch (err) {
-    console.log('Error', res)
-    return null
-  }
+let rateLimit = {
+  remaining: 5000
 }
 
-module.exports = fetch
+async function fetch(owner, name, first, after = null) {
+  let data
+  do {
+    try {
+
+      const response = await r2.post('https://api.github.com/graphql', {
+        headers, json: {
+          query,
+          variables: {
+            owner,
+            name,
+            first,
+            after
+          }
+        }
+      }).response
+
+      if (response.headers.has('Retry-After')) {
+        const retryAfter = parseInt(response.headers.get('Retry-After'))
+        console.log('Retry-After', retryAfter)
+
+        await delay(retryAfter * 1000)
+
+        continue
+      }
+
+      const json = await response.json()
+
+      if (json.data) {
+        data = json.data
+        rateLimit.remaining = data.rateLimit.remaining
+      } else {
+        console.log(json)
+        await delay(1000)
+      }
+
+    } catch (err) {
+      console.log(err)
+      await delay(1000)
+    }
+  } while (!data)
+
+  return data
+}
+
+module.exports = {fetch, rateLimit}

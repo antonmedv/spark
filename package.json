@@ -1,12 +1,12 @@
 {
   "name": "@medv/spark",
   "version": "1.0.0",
-  "private": true,
   "description": "GitHub Stars Sparklines",
   "main": "index.js",
   "author": "Anton Medvedev <anton@medv.io>",
   "license": "MIT",
   "dependencies": {
+    "delay": "^2.0.0",
     "dotenv": "^5.0.1",
     "koa": "^2.5.0",
     "koa-route": "^3.2.0",
