@@ -4,20 +4,14 @@ const route = require('koa-route')
 const serve = require('koa-static')
 const fs = require('mz/fs')
 const {createTextSvg} = require('./svg')
-const {percent} = require('./render')
+const {total} = require('./render')
 const api = require('./api')
 const queue = require('./queue')
+const page = require('./page')
 
 const app = new koa()
 queue.worker()
-
 app.use(serve('public'));
-
-app.use(route.get('/', async (ctx) => {
-  ctx.type = 'text/html'
-  ctx.body = fs.createReadStream('public/index.html')
-}))
-
 
 app.use(route.get('/:owner/:name.svg', async (ctx, owner, name) => {
   ctx.type = 'image/svg+xml; charset=utf-8'
@@ -42,7 +36,7 @@ app.use(route.get('/:owner/:name.svg', async (ctx, owner, name) => {
     if (err.code === 'ENOENT') {
       queue.push(path, owner, name)
 
-      const p = percent.get(path)
+      const p = total.get(path)
       if (p) {
         ctx.body = createTextSvg(`⚡️ loading stars ${p}%`)
       } else {
@@ -54,10 +48,21 @@ app.use(route.get('/:owner/:name.svg', async (ctx, owner, name) => {
   }
 }))
 
+app.use(route.get('/', async (ctx) => {
+  ctx.type = 'text/html'
+  ctx.body = page.index()
+}))
+
+app.use(route.get('/:owner/:name', async (ctx, owner, name) => {
+  ctx.type = 'text/html'
+  ctx.body = page.repo({owner, name})
+}))
+
 app.use(route.get('/status', async (ctx) => {
   ctx.type = 'application/json'
   ctx.body = {
     queueSize: queue.size(),
+    processing: [...total.keys()],
     rateLimit: api.rateLimit.remaining
   }
 }))

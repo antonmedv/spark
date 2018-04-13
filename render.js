@@ -3,10 +3,10 @@ const fs = require('mz/fs')
 const {fetch} = require('./api')
 const {createSvg} = require('./svg')
 
-const percent = new Map()
+const total = new Map()
 
 async function render(path, owner, name) {
-  percent.set(path, 0)
+  total.set(path, 0)
 
   const data = await fetch(owner, name, 100)
 
@@ -20,8 +20,8 @@ async function render(path, owner, name) {
     } = data.repository
 
     while (hasNextPage) {
-      percent.set(path, Math.round(100 * dates.length / totalCount))
-      console.log(`${owner}/${name}: ${percent.get(path)}%`)
+      total.set(path, Math.round(100 * dates.length / totalCount))
+      console.log(`${owner}/${name}: ${total.get(path)}%`)
 
       const data = await fetch(owner, name, 100, endCursor)
 
@@ -40,7 +40,7 @@ async function render(path, owner, name) {
     fs.writeFile(path, svg)
   }
 
-  percent.delete(path)
+  total.delete(path)
 }
 
-module.exports = {render, percent}
+module.exports = {render, total}
