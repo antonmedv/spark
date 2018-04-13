@@ -1,6 +1,7 @@
 require('dotenv').config()
 const koa = require('koa')
 const route = require('koa-route')
+const serve = require('koa-static')
 const fs = require('mz/fs')
 const {createTextSvg} = require('./svg')
 const {percent} = require('./render')
@@ -9,6 +10,14 @@ const queue = require('./queue')
 
 const app = new koa()
 queue.worker()
+
+app.use(serve('public'));
+
+app.use(route.get('/', async (ctx) => {
+  ctx.type = 'text/html'
+  ctx.body = fs.createReadStream('public/index.html')
+}))
+
 
 app.use(route.get('/:owner/:name.svg', async (ctx, owner, name) => {
   ctx.type = 'image/svg+xml; charset=utf-8'
