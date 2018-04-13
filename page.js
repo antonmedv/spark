@@ -15,6 +15,13 @@ const layout = (content) => `
   </style>
   <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-72806543-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'UA-72806543-2');
+  </script>
 </head>
 <body>
   <a href="https://github.com/antonmedv/spark" class="github-corner" aria-label="View source on Github">
@@ -29,14 +36,6 @@ const layout = (content) => `
     <div class="r3" style="${`top: ${rand()}vh; left: ${rand()}vw`}"></div>
     <div class="r4" style="${`top: ${rand()}vh; left: ${rand()}vw`}"></div>
   </div>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-  
-    gtag('config', 'UA-72806543-2');
-  </script>
-
 </body>
 </html>
 `
