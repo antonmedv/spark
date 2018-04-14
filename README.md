@@ -2,7 +2,7 @@
 
 Go to [stars.medv.io](https://stars.medv.io)
 
-Spark is generator of pretty little graphs called sparklines, which shows GitHub stars velocity of a repo.
+Spark is a generator of pretty little graphs called sparklines, which shows GitHub stars velocity of a repo.
 
 ## Development
 
