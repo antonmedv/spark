@@ -4,6 +4,7 @@
   "description": "GitHub Stars Sparklines",
   "main": "index.js",
   "author": "Anton Medvedev <anton@medv.io>",
+  "repository": "antonmedv/spark",
   "license": "MIT",
   "dependencies": {
     "delay": "^2.0.0",
