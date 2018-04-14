@@ -82,6 +82,11 @@ ${h1()}
   ${a('moby/moby')}
   ${a('laravel/laravel')}
   ${a('reactjs/redux')}
+  ${a('d3/d3')}
+  ${a('axios/axios')}
+  ${a('robbyrussell/oh-my-zsh')}
+  ${a('facebook/react-native')}
+  ${a('meteor/meteor')}
 </div>
 `)
 
