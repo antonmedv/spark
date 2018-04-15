@@ -4,7 +4,7 @@ const {fetch} = require('./api')
 
 const query = `
   query ($endCursor: String) {
-    search(type: REPOSITORY, query: "stars:>5000", first: 100, after: $endCursor) {
+    search(type: REPOSITORY, query: "stars:>8000", first: 100, after: $endCursor) {
       repositoryCount
       nodes {
         ... on Repository {
