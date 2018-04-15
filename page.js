@@ -63,7 +63,7 @@ const a = (path) => {
   `
 }
 
-const h1 = () => `<a href="/"><h1>⚡️ Spark <span>GitHub Stars Sparklines</span></h1></a>`
+const h1 = () => `<h1><a href="/">⚡️ Spark </a><span>GitHub Stars Sparklines</span></h1>`
 
 exports.index = () => layout(`
 ${h1()}
