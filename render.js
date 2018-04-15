@@ -5,10 +5,34 @@ const {createSvg} = require('./svg')
 
 const total = new Map()
 
+const query = `
+  query($owner: String!, $name: String!, $endCursor: String) {
+    repository(owner: $owner, name: $name) {
+      stargazers(first: 100, after: $endCursor) {
+        totalCount
+        edges {
+          starredAt
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+    rateLimit {
+      remaining
+    }  
+  }
+`
+
+let rateLimit = {
+  remaining: 5000
+}
+
 async function render(path, owner, name) {
   total.set(path, 0)
 
-  const data = await fetch(owner, name, 100)
+  const data = await fetch(query, {owner, name})
 
   if (data.repository) {
     let {
@@ -23,10 +47,12 @@ async function render(path, owner, name) {
       total.set(path, Math.round(100 * dates.length / totalCount))
       console.log(`${owner}/${name}: ${total.get(path)}%`)
 
-      const data = await fetch(owner, name, 100, endCursor)
+      const data = await fetch(query, {owner, name, endCursor})
 
       hasNextPage = data.repository.stargazers.pageInfo.hasNextPage
       endCursor = data.repository.stargazers.pageInfo.endCursor
+      rateLimit.remaining = data.rateLimit.remaining
+
       dates = dates.concat(data.repository.stargazers.edges)
     }
 
@@ -43,4 +69,4 @@ async function render(path, owner, name) {
   total.delete(path)
 }
 
-module.exports = {render, total}
+module.exports = {render, total, rateLimit}

@@ -4,7 +4,7 @@ const route = require('koa-route')
 const serve = require('koa-static')
 const fs = require('mz/fs')
 const {createTextSvg} = require('./svg')
-const {total} = require('./render')
+const {total, rateLimit} = require('./render')
 const api = require('./api')
 const queue = require('./queue')
 const page = require('./page')
@@ -63,7 +63,7 @@ app.use(route.get('/status', async (ctx) => {
   ctx.body = {
     queueSize: queue.size(),
     processing: [...total.keys()],
-    rateLimit: api.rateLimit.remaining
+    rateLimit: rateLimit.remaining
   }
 }))
 
