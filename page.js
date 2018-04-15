@@ -7,6 +7,7 @@ const layout = (content) => `
 <head>
   <meta charset="UTF-8">
   <title>⚡️ GitHub Stars Sparklines</title>
+  <meta name="description" content="⚡️ Spark is GitHub stars graph generator, it plots tiny little graph called sparkline, which reflects the growth rate of stars on GitHub thought history.">
   <meta name="viewport" content="width=device-width, user-scalable=yes">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
