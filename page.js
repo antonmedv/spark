@@ -89,6 +89,13 @@ ${h1()}
   ${a('facebook/react-native')}
   ${a('meteor/meteor')}
 </div>
+<div class="add-repo">
+  <form method="get">
+    <label for="repo">Create sparkline for any repo:</label>
+    <input id="repo" name="repo" type="text" placeholder="owner/repo">
+    <button type="submit">Let's Go 🔮</button>
+  </form>
+</div>
 `)
 
 

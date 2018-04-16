@@ -21,6 +21,8 @@ body {
 }
 
 .content {
+    display: flex;
+    flex-direction: column;
     margin: 40px auto;
     padding-left: 20px;
     padding-right: 20px;
@@ -128,6 +130,54 @@ code {
         width: 100%;
         max-width: none;
     }
+}
+
+.add-repo {
+    margin-top: 90px;
+    align-self: center;
+}
+
+.add-repo label {
+    display: block;
+    padding: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.add-repo input[type="text"] {
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    padding: 10px 17px;
+    font-family: monospace;
+    font-size: 16px;
+    width: 200px;
+    background-color: #fff;
+    box-shadow: 2px 5px 10px rgb(228, 228, 228);
+}
+
+.add-repo button {
+    margin: 10px;
+    padding: 12px 12px;
+    cursor: pointer;
+    user-select: none;
+    text-align: center;
+    white-space: nowrap;
+    border: 0 none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.3;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    box-shadow: 2px 5px 10px rgb(228, 228, 228);
+    color: #7e8091;
+    background-color: #fff;
+    transition: background-color 150ms linear;
+}
+
+.add-repo button:hover {
+    background-color: #f2f2f2;
 }
 
 .r {

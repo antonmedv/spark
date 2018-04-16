@@ -52,8 +52,12 @@ app.use(route.get('/:owner/:name.svg', async (ctx, owner, name) => {
 }))
 
 app.use(route.get('/', async (ctx) => {
-  ctx.type = 'text/html'
-  ctx.body = page.index()
+  if (ctx.query.repo) {
+    ctx.redirect('/' + ctx.query.repo)
+  } else {
+    ctx.type = 'text/html'
+    ctx.body = page.index()
+  }
 }))
 
 app.use(route.get('/:owner/:name', async (ctx, owner, name) => {
