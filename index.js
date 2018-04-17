@@ -17,7 +17,7 @@ app.use(route.get('/:owner/:name.svg', async (ctx, owner, name) => {
   ctx.type = 'image/svg+xml; charset=utf-8'
 
   const repo = `${owner}/${name}`
-  const path = `svg/${owner}/${name}.svg`
+  const path = `svg/${owner}/${name}.svg`.toLowerCase()
 
   let stats
   try {
