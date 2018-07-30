@@ -101,8 +101,16 @@ ${h1()}
 
 exports.repo = ({owner, name}) => layout(`
 ${h1()}
-<div class="one">      
-  ${box(owner, name)}
+<div class="one">
+  <a class="one-link" href="https://github.com/${owner + '/' + name}">   
+    ${box(owner, name)}
+  </a>
+  <p>
+    The Sparkline shows GitHub stars velocity of <em>${owner + '/' + name}</em> repo for the entire lifetime of the repository.
+    <br>
+    <br>
+    Add the Sparkline to repo's readme, copy markdown code below.
+  </p>
   <code>[![Sparkline](https://stars.medv.io/${owner + '/' + name}.svg)](https://stars.medv.io/${owner + '/' + name})</code>
 </div>
 `)

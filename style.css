@@ -106,16 +106,24 @@ a {
     flex-direction: column;
 }
 
-.one .box {
-    width: 230px;
+.one-link {
+    display: inline-block;
     align-self: center;
-    transform: scale(1.5);
     margin-top: 30px;
-    margin-bottom: 50px;
+    margin-bottom: 60px;
+    transform: scale(1.5);
+}
+
+.one > p {
+    display: block;
+    font-size: 16px;
+    margin-top: 10px;
+    max-width: 600px;
+    align-self: center;    
 }
 
 code {
-    margin-top: 50px;
+    margin-top: 40px;
     padding: 10px 15px;
     max-width: 600px;
     overflow-x: scroll;
