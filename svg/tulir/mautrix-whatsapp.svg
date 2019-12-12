@@ -1,0 +1,16 @@
+<svg width="200" height="50" viewBox="0 0 210 50" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" id="a">
+            <stop stop-color="#3023AE" offset="0%"/>
+            <stop stop-color="#C86DD7" offset="100%"/>
+        </linearGradient>
+    </defs>
+    <path stroke="url(#a)"
+          stroke-width="3"
+          stroke-linejoin="round"
+          stroke-linecap="round"
+          d="M5 40 C 5.25 38.52, 8.71 10.77, 10 10 S 14.27 32.69, 15 34 S 19.27 29.31, 20 28 S 23.71 16.77, 25 16 S 29.04 20.85, 30 22 S 34.04 26.85, 35 28 S 38.71 33.23, 40 34 S 43.5 34, 45 34 S 48.5 34, 50 34 S 53.5 34, 55 34 S 58.5 34, 60 34 S 63.5 34, 65 34 S 68.5 34, 70 34 S 73.5 34, 75 34 S 78.5 34, 80 34 S 83.5 34, 85 34 S 88.5 34, 90 34 S 93.5 34, 95 34 S 98.5 34, 100 34 S 103.5 34, 105 34 S 108.5 34, 110 34 S 113.5 34, 115 34 S 118.5 34, 120 34 S 123.5 34, 125 34 S 128.5 34, 130 34 S 133.5 34, 135 34 S 138.5 34, 140 34 S 143.5 34, 145 34 S 148.5 34, 150 34 S 153.5 34, 155 34"
+          fill="none"/>
+    <circle r="4" cx="5" cy="40" fill="#3023AE"/>
+    <circle r="4" cx="155" cy="34" fill="#C86DD7"/>      
+</svg>
