@@ -22,6 +22,7 @@ async function fetch(query, variables) {
         data = json.data
       } else {
 
+		process.stderr.write('Got error:\n')
         if (json.message) {
           process.stderr.write(json.message + '\n')
         } else {
@@ -38,6 +39,7 @@ async function fetch(query, variables) {
       }
 
     } catch (err) {
+      process.stderr.write('Got error:\n')
       process.stderr.write(JSON.stringify(json) + '\n')
       await delay(5 * 1000)
     }
