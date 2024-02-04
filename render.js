@@ -13,25 +13,20 @@ async function render(path, owner, name) {
   total.set(path, 0)
   
   const dates = []
-  let page
+  let datesPage
   do {
-    page = await fetchStargazerDates({owner, name, endCursor: page?.endCursor})
-    {
-     
-      totalCount: data.stargazers.totalCount,
-      pageInfo:   data.stargazers.pageInfo,
-    }
-    if(page){
-      const pageStargazersDates = data.stargazers.edges.map(({starredAt}) => +(new Date(starredAt))),
+    datesPage = await fetchStargazerDates({owner, name, endCursor: datesPage?.endCursor})
+    if(datesPage){
       
-      total.set(path, Math.round(100 * pageStargazersDates.length / page.stargazers.totalCount))
+      total.set(path, Math.round(100 * datesPage.stargazers.edges.length / datesPage.stargazers.totalCount))
       console.log(`${owner}/${name}: ${total.get(path)}%`)
 
-      stargazerDates = stargazerDates.concat(pageStargazersDates)
+      stargazerDates = stargazerDates.concat(datesPage.stargazers.edges)
     }
-  } while (page?.hasNextPage)
+  } while (datesPage?.hasNextPage)
  
   if (dates.length) {
+    dates = dates.map(({starredAt}) => +(new Date(starredAt))),
     const svg = createSvg(dates)
 
     const dir = dirname(path)
