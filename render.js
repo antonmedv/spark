@@ -39,16 +39,16 @@ async function render(path, owner, name) {
 }
 
 async function fetchStargazerDates(params) {
-  const data = owner === 'gist' ?
-        await fetchGistStargazerDates(params) :
+  const data = params.owner.startsWith('gist:') ?
+        await fetchGistStargazerDates({...params, owner: params.owner.replace(/gist:/,'')}) :
         await fetchRepositoryStargazerDates(params)  
   rateLimit.remaining = data.rateLimit.remaining
   return data
 }
 
 async function fetchGistStargazerDates(params) {
-  const data = await fetch(`query($name: String!, $endCursor: String) {
-    viewer {
+  const data = await fetch(`query($owner: String!, $name: String!, $endCursor: String) {
+    user (login: $owner) {
       gist(name: $name) {
         stargazers(first: 100, after: $endCursor) {
           totalCount
@@ -74,7 +74,7 @@ async function fetchGistStargazerDates(params) {
 }
 
 async function fetchRepositoryStargazerDates(owner, params) {
-  const data = await fetch(`query($owner: String!, $name: String!, $endCursor: String) {
+  const data = await fetch(`query($user: String!, $name: String!, $endCursor: String) {
     repository(owner: $owner, name: $name) {
       stargazers(first: 100, after: $endCursor) {
         totalCount
