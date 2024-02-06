@@ -47,7 +47,8 @@ async function fetchStargazerDates(params) {
 }
 
 async function fetchGistStargazerDates(params) {
-  const data = await fetch(`query($owner: String!, $name: String!, $endCursor: String) {
+  const data = await fetch(`
+  query($owner: String!, $name: String!, $endCursor: String) {
     user (login: $owner) {
       gist(name: $name) {
         stargazers(first: 100, after: $endCursor) {
@@ -74,7 +75,8 @@ async function fetchGistStargazerDates(params) {
 }
 
 async function fetchRepositoryStargazerDates(owner, params) {
-  const data = await fetch(`query($user: String!, $name: String!, $endCursor: String) {
+  const data = await fetch(`
+  query($user: String!, $name: String!, $endCursor: String) {
     repository(owner: $owner, name: $name) {
       stargazers(first: 100, after: $endCursor) {
         totalCount
