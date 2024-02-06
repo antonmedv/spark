@@ -49,7 +49,7 @@ async function fetchStargazerDates(params) {
 async function fetchGistStargazerDates(params) {
   const data = await fetch(`
   query($owner: String!, $name: String!, $endCursor: String) {
-    user (login: $owner) {
+    user(login: $owner) {
       gist(name: $name) {
         stargazers(first: 100, after: $endCursor) {
           totalCount
