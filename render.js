@@ -76,7 +76,7 @@ async function fetchGistStargazerDates(params) {
 
 async function fetchRepositoryStargazerDates(owner, params) {
   const data = await fetch(`
-  query($user: String!, $name: String!, $endCursor: String) {
+  query($owner: String!, $name: String!, $endCursor: String) {
     repository(owner: $owner, name: $name) {
       stargazers(first: 100, after: $endCursor) {
         totalCount
