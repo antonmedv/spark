@@ -40,7 +40,7 @@ async function render(path, owner, name) {
 
 async function fetchStargazerDates(params) {
   const data = params.owner.startsWith('gist:') ?
-        await fetchGistStargazerDates({...params, owner: params.owner.replace(/gist:/,'')}) :
+        await fetchGistStargazerDates({...params, owner: params.owner.replace(/^gist:/,'')}) :
         await fetchRepositoryStargazerDates(params)  
   rateLimit.remaining = data.rateLimit.remaining
   return data
