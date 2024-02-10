@@ -5,28 +5,59 @@ const {createSvg} = require('./svg')
 
 const total = new Map()
 
+const query = `
+  query($owner: String!, $name: String!, $endCursor: String) {
+    repository(owner: $owner, name: $name) {
+      stargazers(first: 100, after: $endCursor) {
+        totalCount
+        edges {
+          starredAt
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+    rateLimit {
+      remaining
+    }  
+  }
+`
+
 let rateLimit = {
   remaining: 5000
 }
 
 async function render(path, owner, name) {
   total.set(path, 0)
-  
-  const dates = []
-  let datesPage
-  do {
-    datesPage = await fetchStargazerDates({owner, name, endCursor: datesPage?.endCursor})
-    if(datesPage){
-      
-      total.set(path, Math.round(100 * datesPage.stargazers.edges.length / datesPage.stargazers.totalCount))
+
+  const data = await fetch(query, {owner, name})
+
+  if (data.repository) {
+    let {
+      stargazers: {
+        totalCount,
+        edges: dates,
+        pageInfo: {hasNextPage, endCursor}
+      }
+    } = data.repository
+
+    while (hasNextPage) {
+      total.set(path, Math.round(100 * dates.length / totalCount))
       console.log(`${owner}/${name}: ${total.get(path)}%`)
 
-      stargazerDates = stargazerDates.concat(datesPage.stargazers.edges)
+      const data = await fetch(query, {owner, name, endCursor})
+
+      hasNextPage = data.repository.stargazers.pageInfo.hasNextPage
+      endCursor = data.repository.stargazers.pageInfo.endCursor
+      rateLimit.remaining = data.rateLimit.remaining
+
+      dates = dates.concat(data.repository.stargazers.edges)
     }
-  } while (datesPage?.hasNextPage)
- 
-  if (dates.length) {
-    dates = dates.map(({starredAt}) => +(new Date(starredAt))),
+
+    dates = dates.map(({starredAt}) => +(new Date(starredAt)))
+
     const svg = createSvg(dates)
 
     const dir = dirname(path)
@@ -36,70 +67,6 @@ async function render(path, owner, name) {
   }
 
   total.delete(path)
-}
-
-async function fetchStargazerDates(params) {
-  const data = params.owner.startsWith('gist:') ?
-        await fetchGistStargazerDates({...params, owner: params.owner.replace(/^gist:/,'')}) :
-        await fetchRepositoryStargazerDates(params)  
-  rateLimit.remaining = data.rateLimit.remaining
-  return data
-}
-
-async function fetchGistStargazerDates(params) {
-  const data = await fetch(`
-  query($owner: String!, $name: String!, $endCursor: String) {
-    user(login: $owner) {
-      gist(name: $name) {
-        stargazers(first: 100, after: $endCursor) {
-          totalCount
-          edges {
-            starredAt
-          }
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
-        }
-      }
-    }
-    rateLimit {
-      remaining
-    }
-  }`, params)
-  rateLimit.remaining = data.rateLimit.remaining
-  return {
-    stargazers: data.viewer.gist.stargazers,
-    rateLimit: data.rateLimit,
-  }
-}
-
-async function fetchRepositoryStargazerDates(owner, params) {
-  const data = await fetch(`
-  query($owner: String!, $name: String!, $endCursor: String) {
-    user(login: $owner) {
-      repository(name: $name) {
-        stargazers(first: 100, after: $endCursor) {
-          totalCount
-          edges {
-            starredAt
-          }
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
-        }
-      }
-    }
-    rateLimit {
-      remaining
-    }  
-  }`, params)
-  rateLimit.remaining = data.rateLimit.remaining
-  return {
-    stargazers: data.repository.stargazers,
-    rateLimit: data.rateLimit,
-  }
 }
 
 module.exports = {render, total, rateLimit}
