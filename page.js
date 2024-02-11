@@ -43,9 +43,6 @@ const layout = (content) => `
 
 const box = (owner, name) => {
   let title = owner + '/' + name
-  if (title.length > 20) {
-    title = name
-  }
   return `
     <div class="box">
       <div class="name">${title}</div>
@@ -102,7 +99,10 @@ ${h1()}
 exports.repo = ({owner, name}) => layout(`
 ${h1()}
 <div class="one">
-  <a class="one-link" href="https://github.com/${owner + '/' + name}">   
+  <a class="one-link" href="${owner.startsWith('gist:') ?
+  `https://gist.github.com/${owner.replace(/^gist:/, '')}/${name}` :
+  `https://github.com/${owner}/${name}`
+}">   
     ${box(owner, name)}
   </a>
   <p>
