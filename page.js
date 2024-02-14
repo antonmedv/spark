@@ -1,3 +1,4 @@
+const nodeFetch = require('node-fetch')
 const style = require('fs').readFileSync('style.css')
 const rand = () => Math.round(100 * Math.random())
 
@@ -41,53 +42,49 @@ const layout = (content) => `
 </html>
 `
 
-const box = (owner, name) => {
-  let title = owner + '/' + name
-  if (title.length > 20) {
-    title = name
-  }
+const box = async (owner, name) => {
   return `
     <div class="box">
-      <div class="name">${title}</div>
+      <div class="name">${await title(owner, name)}</div>
       <img class="spark" src="/${owner + '/' + name}.svg"/>
     </div>
   `
 }
 
-const a = (path) => {
+const a = async (path) => {
   const [owner, name] = path.split('/')
   return `
     <a href="/${owner + '/' + name}">
-      ${box(owner, name)}
+      ${await box(owner, name)}
     </a>  
   `
 }
 
 const h1 = () => `<h1><a href="/">⚡️ Spark </a><span>GitHub Stars Sparklines</span></h1>`
 
-exports.index = () => layout(`
+exports.index = async () => layout(`
 ${h1()}
 <div class="grid">
-  ${a('facebook/react')}
-  ${a('angular/angular')}
-  ${a('vuejs/vue')}
-  ${a('freeCodeCamp/freeCodeCamp')}
-  ${a('jquery/jquery')}
-  ${a('twbs/bootstrap')}
-  ${a('rails/rails')}
-  ${a('FortAwesome/Font-Awesome')}
-  ${a('jashkenas/backbone')}
-  ${a('php/php-src')}
-  ${a('nodejs/node')}
-  ${a('torvalds/linux')}
-  ${a('moby/moby')}
-  ${a('laravel/laravel')}
-  ${a('reactjs/redux')}
-  ${a('d3/d3')}
-  ${a('axios/axios')}
-  ${a('robbyrussell/oh-my-zsh')}
-  ${a('facebook/react-native')}
-  ${a('meteor/meteor')}
+  ${await a('facebook/react')}
+  ${await a('angular/angular')}
+  ${await a('vuejs/vue')}
+  ${await a('freeCodeCamp/freeCodeCamp')}
+  ${await a('jquery/jquery')}
+  ${await a('twbs/bootstrap')}
+  ${await a('rails/rails')}
+  ${await a('FortAwesome/Font-Awesome')}
+  ${await a('jashkenas/backbone')}
+  ${await a('php/php-src')}
+  ${await a('nodejs/node')}
+  ${await a('torvalds/linux')}
+  ${await a('moby/moby')}
+  ${await a('laravel/laravel')}
+  ${await a('reactjs/redux')}
+  ${await a('d3/d3')}
+  ${await a('axios/axios')}
+  ${await a('robbyrussell/oh-my-zsh')}
+  ${await a('facebook/react-native')}
+  ${await a('meteor/meteor')}
 </div>
 <div class="add-repo">
   <form method="get">
@@ -99,18 +96,44 @@ ${h1()}
 `)
 
 
-exports.repo = ({owner, name}) => layout(`
+exports.repo = async ({owner, name}) => layout(`
 ${h1()}
 <div class="one">
-  <a class="one-link" href="https://github.com/${owner + '/' + name}">   
-    ${box(owner, name)}
+  <a class="one-link" href="${href(owner, name)}">   
+    ${await box(owner, name)}
   </a>
   <p>
-    The Sparkline shows GitHub stars velocity of <em>${owner + '/' + name}</em> repo for the entire lifetime of the repository.
+    This Sparkline shows GitHub stars velocity for the entire lifetime of
     <br>
     <br>
-    Add the Sparkline to repo's readme, copy markdown code below.
+    <b>${owner.startsWith('gist:') ? 'gist ' : ''}</b><em>${owner.replace(/^gist:/, '') + '/' + name}</em>
+    <br>
+    <br>
+    Add the Sparkline to repo's readme, copy Markdown code below.
   </p>
   <code>[![Sparkline](https://stars.medv.io/${owner + '/' + name}.svg)](https://stars.medv.io/${owner + '/' + name})</code>
 </div>
 `)
+
+function href(owner, name) {
+  return owner.startsWith('gist:') ?
+    `https://gist.github.com/${owner.replace(/^gist:/, '')}/${name}` :
+    `https://github.com/${owner}/${name}`
+}
+
+async function title(owner, name) {
+  if(owner.startsWith('gist:')) {
+    const gistPrefix = '<b><small>gist</smal></small></b>'
+    const ownerDisplayName = owner.replace(/^gist:/,'')
+
+    const response = await nodeFetch(`https://api.github.com/gists/${name}`)
+    if (response.status !== 200) {
+      return `${gistPrefix} ${ownerDisplayName}/${name}`
+    }
+    const data = await response.json()
+    const gistDisplayName = Object.keys(data.files)[0]
+    return `${gistPrefix} ${ownerDisplayName}/${gistDisplayName}`
+  }
+
+  return `${owner}/${name}`
+}

@@ -22,21 +22,21 @@ const add = (a, b) => vec(a.x + b.x, a.y + b.y)
 const sub = (a, b) => vec(a.x - b.x, a.y - b.y)
 const end = px => px[px.length - 1]
 
-function createSvg(data) {
-  if (data.length <= steps) {
+function createSvg(dates) {
+  if (dates.length <= steps) {
     return createTextSvg('⭐️ not enough stars')
   }
 
-  const min = data[0]
-  const max = end(data)
+  const min = dates[0].getTime()
+  const max = end(dates).getTime()
   const step = (max - min) / steps
 
   const yx = []
   {
     let i = min
     let count = 0
-    for (let d of data) {
-      if (d < i + step) {
+    for (let date of dates) {
+      if (date.getTime() < i + step) {
         count++
       } else {
         yx.push(count)
