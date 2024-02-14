@@ -57,13 +57,13 @@ app.use(route.get('/', async (ctx) => {
     ctx.redirect('/' + ctx.query.repo)
   } else {
     ctx.type = 'text/html'
-    ctx.body = page.index()
+    ctx.body = await page.index()
   }
 }))
 
 app.use(route.get('/:owner/:name', async (ctx, owner, name) => {
   ctx.type = 'text/html'
-  ctx.body = page.repo({owner, name})
+  ctx.body = await page.repo({owner, name})
 }))
 
 app.use(route.get('/status', async (ctx) => {
