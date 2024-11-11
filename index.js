@@ -4,7 +4,8 @@ const route = require('koa-route')
 const serve = require('koa-static')
 const fs = require('mz/fs')
 const {createTextSvg} = require('./svg')
-const {total, rateLimit} = require('./render')
+const {total} = require('./render')
+const {rateLimit} = require('./api')
 const queue = require('./queue')
 const page = require('./page')
 const ttl = require('./ttl')
@@ -56,22 +57,22 @@ app.use(route.get('/', async (ctx) => {
     ctx.redirect('/' + ctx.query.repo)
   } else {
     ctx.type = 'text/html'
-    ctx.body = page.index()
+    ctx.body = await page.index()
   }
 }))
 
 app.use(route.get('/:owner/:name', async (ctx, owner, name) => {
   ctx.type = 'text/html'
-  ctx.body = page.repo({owner, name})
+  ctx.body = await page.repo({owner, name})
 }))
 
 app.use(route.get('/status', async (ctx) => {
   ctx.type = 'application/json'
-  ctx.body = {
+  ctx.body = JSON.stringify({
     queueSize: queue.size(),
     processing: [...total.keys()],
-    rateLimit: rateLimit.remaining
-  }
+    rateLimit
+  }, null, 2)
 }))
 
 const port = process.env.PORT || 3000
