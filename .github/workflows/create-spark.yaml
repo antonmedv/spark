@@ -1,0 +1,12 @@
+on:
+  workflow_dispatch:
+    inputs:
+      repository:
+        type: text
+        required: true  
+
+jobs:
+  create-spark:
+    runs-on: ubuntu-latest
+    steps:
+      - run: node create-spark.js ${{ inouts.repository }}
