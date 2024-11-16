@@ -23,6 +23,10 @@ Spark can't eagerly load all stars of a repo, only 100 stargazers per requset al
 
 Spark has special endpoint for monitoring remaining rate limit, queue size and processing svg: [stars.medv.io/status](https://stars.medv.io/status)
 
+## Related
+
+- https://github.com/qoomon/starline
+
 ## License
 
 MIT
